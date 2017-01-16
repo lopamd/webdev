@@ -1,0 +1,62 @@
+USE ECOMMERCE;
+CREATE TABLE LOGIN (
+USERNAME VARCHAR(30) PRIMARY KEY,
+PASSWORD VARCHAR(30) NOT NULL,
+LAST_LOGIN TIMESTAMP
+);
+
+DROP TABLE IF EXISTS REGISTER;  
+CREATE TABLE REGISTER(
+USERNAME VARCHAR(30) PRIMARY KEY,
+NAME  VARCHAR(30),
+ADDRESS VARCHAR(100),
+CITY VARCHAR(30),
+ZIP VARCHAR(10),
+STATE VARCHAR(20),
+EMAIL VARCHAR(40),
+PHNO CHAR(10),
+PASSWORD VARCHAR(30),
+Cart_ID int(15) not null auto_increment,
+CONSTRAINT pk_Register unique key (Cart_ID));
+
+
+CREATE TABLE POST (
+USERNAME VARCHAR(30),
+POSTID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+BOOKNAME VARCHAR(30),
+AUTHOR VARCHAR(30),
+EDITION VARCHAR(5),
+COMMENTS VARCHAR(200),
+CATEGORY VARCHAR(30)
+);
+CREATE TABLE BIDDINGDETAILS(
+USERNAME VARCHAR(30),
+POSTID INT(6) UNSIGNED,
+BIDID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+PRICE DOUBLE PRECISION(7,4),
+TITLE VARCHAR(30),
+COMMENTS VARCHAR(200)
+);
+
+DROP TABLE IF EXISTS Cart;
+CREATE TABLE Cart (
+  Cart_ID      int(15) not null,
+  Cart_TotalPrice    double(5,2),
+  Cart_TotalItems  	 int(5),
+  CONSTRAINT pk_Cart primary key (Cart_ID),
+  CONSTRAINT fk_Cart_Register foreign key (Cart_ID) references register(Cart_ID));
+  
+-- insert  into Cart values(100,0,0);
+  
+  
+
+DROP TABLE IF EXISTS CartItem;
+CREATE TABLE CartItem (
+  CartItem_ID      int(15) not null auto_increment,
+  CartItem_quantity    int(5),
+  CartItem_totalPrice  double(5,2),
+  BIDID  INT(6) UNSIGNED not null,
+  Cart_ID int(15) not null,
+  CONSTRAINT pk_CartItem primary key (CartItem_ID),
+  CONSTRAINT fk_CartItem_Bid foreign key (BIDID) references BIDDINGDETAILS(BIDID),
+  CONSTRAINT fk_CartItem_Cart foreign key (Cart_ID) references Cart(Cart_ID));
